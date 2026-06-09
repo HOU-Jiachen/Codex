@@ -3,12 +3,17 @@
 json、re、datetime、pathlib、os 都是 Python 标准库，不需要下载。
 **前期准备：**
 *1. AGENTS.md：控制语气、禁忌词（如拒绝AI套话）、专有名词标准（如必须用“植物措施”），可根据项目规范进行调整。*
-*2. report_template.docx：word模板，可根据现有样式进行修改，注意：不要修改名称或新建样式。*
-*3. knowledge文件夹：存放该项目的相关文件，可支持word、PDF等文件，注意：最好不要单独放图件。*
+*2. templates / report_template.docx：word模板，可根据现有样式进行修改，注意：不要修改名称或新建样式。*
+*3. knowledge文件夹：存放长期使用的相关文件，可支持word、PDF等文件，注意：最好不要单独放图件。*
 *4. DATA_COLLECTION_CHECKLIST.md：水土保持方案报告资料收集清单，用于在生成水土保持方案报告前，检查 `PROJECT_CONTEXT.md` 和本地 `knowledge/` 资料库是否足以支撑成品报告。缺少资料时，不应直接生成完整报告，应先向用户索取资料，或在对应章节显式标注缺失。*
-*5. SKILL.md：对 Agent 有流程约束作用。name: generate-water-soil-conservation-report。使agent严格按照“自动构建项目上下文、检索、撰写、输出JSON、等待人类确认、运行排版”运行。*
+*5. SKILL.md：对 Agent 有流程约束作用。name: generate-water-soil-conservation-report。使agent严格按照“自动构建项目上下文、检索、撰写、输出JSON、等待用户确认、运行排版”运行。*
 6. context_builder.py：扫描资料，生成 PROJECT_CONTEXT.md、PROJECT_CONTEXT_SOURCES.json、MATERIAL_GAP_REPORT.md。
 7. docx_builder.py：读取 temp_report.json，生成 output_report.docx。
+8. standards_templates文件夹：存放模板。
+9. projects文件夹：存放每个项目的相关资料，用于提升复用性，并避免不同项目之间资料数据互相污染。
+10. pdf-converter skill：外部下载的PDF读取skill，下载命令为：npx skills add tanis90/pdf-converter-mineru。
+
+
 **开始运行：**
 第一步：在 Codex 中打开您的项目工作区
 请确保您的 Codex 当前已经加载或打开了 X:\XXX\Engineering_Report_Agent 这个文件夹。如果还没有，请在 Codex 的菜单栏选择 File -> Open Folder（打开文件夹），然后选中该路径。
