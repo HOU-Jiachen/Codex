@@ -17,6 +17,9 @@ except Exception:  # pragma: no cover
 ROOT = Path(__file__).resolve().parents[3]
 SKILL_DIR = Path(__file__).resolve().parent
 KNOWLEDGE_DIR = SKILL_DIR / "knowledge"
+STANDARDS_TEMPLATE_DIR = ROOT / "standards_templates"
+PROJECTS_DIR = ROOT / "projects"
+ACTIVE_PROJECT_FILE = ROOT / "ACTIVE_PROJECT.txt"
 OUTPUT_MD = ROOT / "PROJECT_CONTEXT.md"
 OUTPUT_JSON = ROOT / "PROJECT_CONTEXT_SOURCES.json"
 GAP_REPORT_MD = ROOT / "MATERIAL_GAP_REPORT.md"
@@ -35,6 +38,7 @@ SKIP_NAMES = {
     "comparison_summary.json",
     "reference_final_report_text.txt",
     "AGENTS.md",
+    "PROJECT_CONTEXT_OVERRIDE.example.md",
 }
 
 
@@ -177,12 +181,43 @@ VALUE_PATTERNS = [
     ("水土保持补偿费", r"水土保持补偿费\s*([0-9.]+)\s*万元"),
 ]
 
+FIELD_ALIASES = {
+    "项目名称": ["项目名称", "工程名称"],
+    "项目代码": ["项目代码"],
+    "建设单位": ["建设单位", "项目建设单位"],
+    "编制单位": ["编制单位", "方案编制单位"],
+    "建设地点": ["建设地点", "项目地点", "工程地点"],
+    "建设性质": ["建设性质", "工程性质"],
+    "总投资": ["总投资", "工程总投资"],
+    "土建投资": ["土建投资"],
+    "建设工期": ["建设工期", "工期"],
+    "防治责任范围": ["防治责任范围", "防治责任范围面积"],
+    "临时占地": ["临时占地", "临时占地面积"],
+    "挖方": ["挖方", "总挖方", "总挖方量"],
+    "填方": ["填方", "总填方", "总填方量"],
+    "借方": ["借方", "外购借方", "外购土石方"],
+    "余弃方": ["余弃方", "余方弃方", "弃方"],
+    "土壤容许流失量": ["土壤容许流失量", "容许土壤流失量", "土壤流失容许值"],
+    "原地貌土壤侵蚀模数": ["原地貌土壤侵蚀模数", "原地貌侵蚀模数"],
+    "预测水土流失总量": ["预测水土流失总量", "水土流失总量"],
+    "新增水土流失量": ["新增水土流失量", "新增水土流失总量"],
+    "水土保持总投资": ["水土保持总投资"],
+    "工程措施投资": ["工程措施投资"],
+    "植物措施投资": ["植物措施投资"],
+    "临时措施投资": ["临时措施投资"],
+    "独立费用": ["独立费用"],
+    "水土保持补偿费": ["水土保持补偿费"],
+}
+
 
 def clean_text(text):
     text = text.replace("\x00", "")
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+OCR_MIN_TEXT_CHARS = 300
 
 
 def extract_pdf(path):
@@ -231,8 +266,36 @@ def extract_plain(path):
     return ""
 
 
+def iter_override_files():
+    if OVERRIDE_MD.exists():
+        yield OVERRIDE_MD
+    projects_dir = ROOT / "projects"
+    if projects_dir.exists():
+        for path in projects_dir.glob("*/override/PROJECT_CONTEXT_OVERRIDE.md"):
+            if path.exists():
+                yield path
+
+
+def read_override_texts():
+    items = []
+    for path in iter_override_files():
+        text = extract_plain(path)
+        if text:
+            items.append({
+                "path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
+                "text": text,
+            })
+    return items
+
+
 def iter_sources():
-    roots = [ROOT, KNOWLEDGE_DIR]
+    roots = [ROOT, KNOWLEDGE_DIR, STANDARDS_TEMPLATE_DIR]
+    if ACTIVE_PROJECT_FILE.exists():
+        active_project = ACTIVE_PROJECT_FILE.read_text(encoding="utf-8", errors="ignore").lstrip("\ufeff").strip()
+        if active_project:
+            roots.insert(1, PROJECTS_DIR / active_project)
+    else:
+        roots.insert(1, PROJECTS_DIR)
     seen = set()
     for base in roots:
         if not base.exists():
@@ -242,7 +305,11 @@ def iter_sources():
                 continue
             if ".agents" in path.parts and not path.is_relative_to(KNOWLEDGE_DIR):
                 continue
+            if "work" in path.parts or "output" in path.parts:
+                continue
             if path.name in SKIP_NAMES:
+                continue
+            if path.name.endswith(".example.md"):
                 continue
             if path.suffix.lower() not in SOURCE_SUFFIXES:
                 continue
@@ -251,6 +318,10 @@ def iter_sources():
                 continue
             seen.add(resolved)
             yield path
+
+
+def needs_ocr(path, text):
+    return path.suffix.lower() == ".pdf" and len(text.strip()) < OCR_MIN_TEXT_CHARS
 
 
 def source_score(path, text):
@@ -270,6 +341,7 @@ def source_score(path, text):
 
 def collect_sources():
     records = []
+    ocr_required = []
     for path in iter_sources():
         suffix = path.suffix.lower()
         if suffix == ".pdf":
@@ -278,6 +350,13 @@ def collect_sources():
             text = extract_docx(path)
         else:
             text = extract_plain(path)
+        if needs_ocr(path, text):
+            ocr_required.append({
+                "path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
+                "absolute_path": str(path),
+                "chars": len(text),
+                "reason": "PDF 无法抽取足够文字，可能为扫描件或损坏文件，需要先 OCR。",
+            })
         if not text:
             continue
         records.append({
@@ -288,7 +367,7 @@ def collect_sources():
             "text": text,
         })
     records.sort(key=lambda r: r["score"], reverse=True)
-    return records
+    return records, ocr_required
 
 
 def evidence_for_keywords(records, keywords, limit=5):
@@ -333,6 +412,28 @@ def normalize_value(label, value):
     if label == "建设单位" and "局" in value:
         value = value[: value.find("局") + 1]
     return value
+
+
+def extract_override_values(override_items):
+    values = {}
+    for item in override_items:
+        text = item["text"]
+        for label, aliases in FIELD_ALIASES.items():
+            for alias in aliases:
+                patterns = [
+                    rf"^\s*[-*]?\s*{re.escape(alias)}\s*[:：]\s*(.+?)\s*$",
+                    rf"^\s*\|\s*{re.escape(alias)}\s*\|\s*(.+?)\s*\|",
+                ]
+                for pattern in patterns:
+                    for match in re.finditer(pattern, text, flags=re.MULTILINE):
+                        raw = match.group(1).strip()
+                        if not raw or raw in {"/", "无", "待补充"}:
+                            continue
+                        values[label] = {
+                            "value": normalize_value(label, raw),
+                            "source": f"{item['path']}（人工补充，优先）",
+                        }
+    return values
 
 
 def value_score(label, value, source_path):
@@ -404,7 +505,7 @@ def coverage(sections):
     return result
 
 
-def preflight(records, values, sections):
+def preflight(records, values, sections, ocr_required):
     cov = coverage(sections)
     missing_critical = [
         name for name in CRITICAL_SECTIONS
@@ -447,6 +548,7 @@ def preflight(records, values, sections):
             for name in missing_secondary
             if name in SECONDARY_SUPPLEMENTS
         },
+        "ocr_required_sources": ocr_required,
     }
 
 
@@ -485,7 +587,16 @@ def render_gap_report(precheck):
         lines.append("暂无必须优先补充的资料。")
         lines.append("")
 
-    lines.extend(["## 3 次要补充资料", ""])
+    lines.extend(["## 3 需要 OCR 的资料", ""])
+    if precheck["ocr_required_sources"]:
+        for item in precheck["ocr_required_sources"]:
+            lines.append(f"- `{item['path']}`：{item['reason']}")
+        lines.append("")
+    else:
+        lines.append("未发现需要 OCR 的 PDF。")
+        lines.append("")
+
+    lines.extend(["## 4 次要补充资料", ""])
     if precheck["secondary_supplements"]:
         for section, items in precheck["secondary_supplements"].items():
             lines.append(f"### {section}")
@@ -497,7 +608,7 @@ def render_gap_report(precheck):
         lines.append("")
 
     lines.extend([
-        "## 4 用户选择建议",
+        "## 5 用户选择建议",
         "",
         "- 选择继续运行：可生成缺失标注版初稿，缺资料章节必须保留显式缺失提示，不得补写硬数据。",
         "- 选择补充材料：建议先补充“优先补充资料”，再补充“次要补充资料”，补充后重新运行 `context_builder.py`。",
@@ -551,32 +662,35 @@ def render_markdown(records, values, sections):
         if status != "充分":
             lines.append(f"- {name}：{status}。生成报告时应优先索取或补充资料；若继续生成，应在对应章节显式标注缺失。")
 
-    if OVERRIDE_MD.exists():
-        override_text = OVERRIDE_MD.read_text(encoding="utf-8", errors="ignore").strip()
-        if override_text:
-            lines.extend(["", "## 5 人工修正覆盖", "", override_text])
+    override_items = read_override_texts()
+    if override_items:
+        lines.extend(["", "## 5 人工修正覆盖", ""])
+        for item in override_items:
+            lines.append(f"### {item['path']}")
+            lines.append(item["text"])
+            lines.append("")
     else:
         lines.extend([
             "",
             "## 5 人工修正覆盖",
             "",
-            "未发现 `PROJECT_CONTEXT_OVERRIDE.md`。如需人工修正自动抽取结果，请新建该文件并写入明确字段及依据。",
+            "未发现 `PROJECT_CONTEXT_OVERRIDE.md`。如需人工修正自动抽取结果，请在根目录或 `projects/<项目简称>/override/` 新建该文件并写入明确字段及依据。",
         ])
 
     return "\n".join(lines).strip() + "\n"
 
 
 def main():
-    records = collect_sources()
-    if not records:
-        raise SystemExit("No readable source files found.")
-
+    records, ocr_required = collect_sources()
     values = extract_values(records)
+    override_items = read_override_texts()
+    override_values = extract_override_values(override_items)
+    values.update(override_values)
     sections = {
         name: evidence_for_keywords(records, keywords)
         for name, keywords in SECTIONS
     }
-    precheck = preflight(records, values, sections)
+    precheck = preflight(records, values, sections, ocr_required)
     markdown = render_markdown(records, values, sections)
     OUTPUT_MD.write_text(markdown, encoding="utf-8")
     GAP_REPORT_MD.write_text(render_gap_report(precheck), encoding="utf-8")
@@ -584,8 +698,10 @@ def main():
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "sources": [{k: v for k, v in record.items() if k != "text"} for record in records],
         "values": values,
+        "override_values": override_values,
         "coverage": coverage(sections),
         "preflight": precheck,
+        "ocr_required_sources": ocr_required,
         "sections": sections,
     }
     OUTPUT_JSON.write_text(json.dumps(serializable, ensure_ascii=False, indent=2), encoding="utf-8")

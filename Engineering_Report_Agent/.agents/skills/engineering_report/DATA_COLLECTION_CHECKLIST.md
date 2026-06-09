@@ -5,12 +5,18 @@
 ## 0 自动上下文生成要求
 
 - `PROJECT_CONTEXT.md` 应由 `.agents/skills/engineering_report/context_builder.py` 自动生成，不作为主要人工录入文件。
-- 原始资料应优先放入项目根目录或 `.agents/skills/engineering_report/knowledge/`，支持 PDF、DOCX、TXT、MD。
+- 项目原始资料应优先放入项目根目录，支持 PDF、DOCX、TXT、MD。
+- 多项目运行时，项目原始资料应放入 `projects/<项目简称>/raw/`，避免不同项目资料互相污染。
+- 长期复用的规范、标准、地方文件、报告模板和优秀样例应放入根目录 `standards_templates/`。
+- `.agents/skills/engineering_report/knowledge/` 继续用于技能内置知识库和历史资料。
+- 扫描版 PDF 不能直接作为可引用文字依据；若自动上下文将其列入 `ocr_required_sources`，应先 OCR 后再用于报告正文。
 - 少量人工修正、补充或人工确认结论，应写入根目录 `PROJECT_CONTEXT_OVERRIDE.md`，由脚本自动并入上下文。
+- 人工补充资料优先级高于自动抽取资料。可参考根目录 `PROJECT_CONTEXT_OVERRIDE.example.md` 填写。
 - 每次新增或替换原始资料后，应重新运行 `context_builder.py`，再开始生成报告正文。
 - 报告正文不得使用没有资料来源的自动推断数字；自动上下文中仅有“缺失”或“不足”的分项，应触发缺失拦截。
 - 若 `PROJECT_CONTEXT_SOURCES.json` 中 `preflight.blocked` 为 `true`，必须暂停运行，向用户展示 `MATERIAL_GAP_REPORT.md` 中的缺失资料清单，并让用户选择“继续运行”或“补充材料”。
 - 用户选择“继续运行”时，只能生成缺失标注版初稿；用户选择“补充材料”时，应推荐优先补充资料和次要补充资料，不继续生成报告。
+- 正文生成前应读取 `chapter_gates.json` 执行章节级资料门禁；门禁不满足时，应保留该章已有资料可写内容，并在缺失小节或缺失数据位置输出缺失标注。
 
 ## 1 前置行政与项目主体资料
 

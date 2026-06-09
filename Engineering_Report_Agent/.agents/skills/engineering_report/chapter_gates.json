@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "description": "水土保持方案报告章节级资料门禁。status=blocked 时应暂停或生成缺失标注，不得编造。",
+    "source": "结合水土保持方案报告表常规章节和 standards_templates 中模板资料维护"
+  },
+  "chapters": [
+    {
+      "id": "front_matter",
+      "title": "前置表单与承诺材料",
+      "style": "标题一",
+      "required_fields": ["项目名称", "项目代码", "建设单位", "建设地点"],
+      "required_sections": ["前置行政与项目主体资料"],
+      "high_priority_materials": ["水土保持行政许可承诺书信息", "项目代码或立项备案文件", "建设单位联系人及公示信息"],
+      "default_blocks": ["生产建设项目水土保持方案报告表", "水土保持行政许可承诺书"]
+    },
+    {
+      "id": "summary",
+      "title": "综合说明",
+      "style": "标题一",
+      "required_fields": ["项目名称", "建设单位", "建设地点", "建设性质", "防治责任范围", "土壤容许流失量", "原地貌土壤侵蚀模数"],
+      "required_sections": ["前置行政与项目主体资料", "工程占地与土石方资料", "项目区自然与水土流失背景资料"],
+      "high_priority_materials": ["项目基本情况", "防治责任范围", "防治标准等级及目标", "水土流失预测结果", "措施和投资摘要"],
+      "default_blocks": ["项目简况", "编制依据", "设计水平年", "防治责任范围", "防治标准等级及目标", "结论与建议"]
+    },
+    {
+      "id": "project_overview",
+      "title": "项目概况",
+      "style": "标题一",
+      "required_fields": ["项目名称", "建设地点", "建设性质", "总投资", "土建投资", "防治责任范围", "挖方", "填方"],
+      "required_sections": ["主体工程设计资料", "工程占地与土石方资料"],
+      "high_priority_materials": ["主体设计说明", "施工组织和施工工艺", "工程占地表", "土石方平衡表"],
+      "default_blocks": ["项目组成及工程布置", "施工组织和施工工艺", "工程占地", "土石方平衡", "施工进度安排", "自然概况"]
+    },
+    {
+      "id": "evaluation",
+      "title": "项目水土保持评价",
+      "style": "标题一",
+      "required_fields": ["项目名称", "防治责任范围"],
+      "required_sections": ["水土保持评价资料", "主体工程设计资料", "工程占地与土石方资料"],
+      "high_priority_materials": ["GB 50433 制约性因素分析", "主体工程选址评价", "建设方案与布局评价", "主体工程已有水保措施界定"],
+      "default_blocks": ["项目主体工程选址（线）水土保持评价", "项目建设方案与布局水土保持评价", "主体工程设计中水土保持措施界定"]
+    },
+    {
+      "id": "prediction",
+      "title": "水土流失分析与预测",
+      "style": "标题一",
+      "required_fields": ["防治责任范围", "土壤容许流失量", "原地貌土壤侵蚀模数", "预测水土流失总量"],
+      "required_sections": ["水土流失预测资料", "项目区自然与水土流失背景资料"],
+      "high_priority_materials": ["预测单元划分", "预测时段", "侵蚀模数取值", "土壤流失量预测计算表"],
+      "default_blocks": ["水土流失影响因素分析", "预测单元", "预测时段", "土壤侵蚀模数", "土壤流失量预测", "水土流失危害分析"]
+    },
+    {
+      "id": "measures",
+      "title": "水土保持措施",
+      "style": "标题一",
+      "required_fields": ["防治责任范围"],
+      "required_sections": ["水土保持措施资料"],
+      "high_priority_materials": ["防治分区", "工程措施工程量", "植物措施工程量", "临时措施工程量", "措施布置图"],
+      "default_blocks": ["水土流失防治区划分", "措施总体布局", "分区措施布设", "施工要求"]
+    },
+    {
+      "id": "investment",
+      "title": "水土保持投资概算及效益分析",
+      "style": "标题一",
+      "required_fields": ["水土保持总投资", "工程措施投资", "植物措施投资", "临时措施投资", "水土保持补偿费"],
+      "required_sections": ["投资概算与效益资料"],
+      "high_priority_materials": ["投资概算总表", "分部工程概算表", "独立费用", "补偿费计算表", "六项目标达标测算表"],
+      "default_blocks": ["投资概算", "效益分析"]
+    },
+    {
+      "id": "management",
+      "title": "水土保持管理",
+      "style": "标题一",
+      "required_fields": ["建设单位"],
+      "required_sections": ["水土保持管理资料"],
+      "high_priority_materials": ["组织管理", "后续设计", "水土保持监理", "水土保持施工", "水土保持设施验收"],
+      "default_blocks": ["组织管理", "后续设计", "水土保持监理", "水土保持施工", "水土保持设施验收"]
+    },
+    {
+      "id": "attachments",
+      "title": "附件、附表及附图",
+      "style": "标题一",
+      "required_fields": ["项目名称"],
+      "required_sections": ["附件、附表与附图资料"],
+      "high_priority_materials": ["委托书", "批复文件", "用地意见", "土方合同", "项目位置图", "水系图", "措施布置图"],
+      "default_blocks": ["附件", "附表", "附图"]
+    }
+  ]
+}
+

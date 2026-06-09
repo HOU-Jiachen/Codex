@@ -24,10 +24,30 @@ outputs:
 python .agents/skills/engineering_report/context_builder.py
 ```
 
+如需新建项目隔离目录，可先运行：
+
+```bash
+python .agents/skills/engineering_report/project_manager.py 项目简称
+```
+
+若 `standards_templates/` 中新增或替换了报告模板 PDF，应先运行：
+
+```bash
+python .agents/skills/engineering_report/template_profile_builder.py
+```
+
+该脚本会生成 `REPORT_TEMPLATE_PROFILE.json`。若模板 PDF 为扫描件或无法抽取文字，应先 OCR 后再重新运行。
+
+生成 `temp_report.json` 前，必须读取 `REPORT_TEMPLATE_PROFILE.json`。如该文件包含模板标题序列，`report_generator.py` 必须优先按模板标题顺序生成报告结构；不得仅按 `chapter_gates.json` 的粗粒度章节顺序生成。`chapter_gates.json` 仅作为资料门禁和缺失项判断依据。
+
 自动构建规则：
-- 脚本会扫描项目根目录及 `.agents/skills/engineering_report/knowledge/` 中的 PDF、DOCX、TXT、MD 资料。
+- 脚本会扫描项目根目录、`projects/`、`standards_templates/` 及 `.agents/skills/engineering_report/knowledge/` 中的 PDF、DOCX、TXT、MD 资料。
+- `projects/<项目简称>/raw/` 用于放置项目原始资料，`work/` 和 `output/` 为自动生成文件目录，扫描时会跳过。
+- `standards_templates/` 用于存放长期复用的水土保持规范、标准、地方文件、报告模板和优秀样例；具体项目资料仍放项目根目录。
+- 对无法直接抽取文字或文字量过少的 PDF，脚本会标记为需要 OCR，并写入 `MATERIAL_GAP_REPORT.md` 和 `PROJECT_CONTEXT_SOURCES.json`。
 - 脚本会生成 `PROJECT_CONTEXT.md`、`PROJECT_CONTEXT_SOURCES.json` 和 `MATERIAL_GAP_REPORT.md`，其中包含资料源、关键字段、分项覆盖度、证据摘录、预检查状态和缺口提示。
 - 如需人工修正自动抽取结果，只允许写入根目录 `PROJECT_CONTEXT_OVERRIDE.md`；脚本会在下次生成时自动附加该文件内容。
+- 人工补充资料优先级最高。可写入根目录 `PROJECT_CONTEXT_OVERRIDE.md`，也可写入 `projects/<项目简称>/override/PROJECT_CONTEXT_OVERRIDE.md`；其中的字段会覆盖自动抽取字段。
 - 报告正文中出现的工程量、投资、预测结果、自然概况、行政信息等数字，应优先来自自动生成的 `PROJECT_CONTEXT.md` 中带来源的字段或证据摘录。
 - 若自动上下文显示某资料分项为“缺失”或“不足”，不得直接补写成品深度内容，应按缺失拦截机制处理。
 
@@ -38,6 +58,23 @@ python .agents/skills/engineering_report/context_builder.py
   1. **继续运行**：生成缺失标注版初稿，缺资料章节按缺失拦截机制处理。
   2. **补充材料**：先暂停生成，并根据 `MATERIAL_GAP_REPORT.md` 推荐用户优先补充资料和次要补充资料。
 - 用户明确选择“继续运行”或同等含义时，才可继续撰写；用户选择“补充材料”或同等含义时，应停止生成流程，只给出补料清单。
+- 若 `preflight.ocr_required_sources` 非空，即使 `preflight.blocked` 为 `false`，也应提示用户这些 PDF 需要 OCR；涉及规范或模板依据的章节不得引用未 OCR 的扫描件内容。
+
+### 章节级资料门禁（必须执行）
+进入正文生成前，必须读取 `chapter_gates.json`：
+- 每个章节均有 `required_fields` 和 `required_sections`。
+- 任一章节门禁不满足时，不得整章空置；应先写入已有资料能够支撑的内容，再在对应小节或段落位置输出缺失标注块。
+- 对于缺少字段、缺少计算表、缺少措施工程量等内容，只跳过该具体项目，不跳过整章。
+- 章节门禁结果应体现在 `temp_report.json` 中，供人工审查。
+
+### 正式章节生成器
+当资料预检查通过，或用户选择“继续运行”后，优先运行：
+
+```bash
+python .agents/skills/engineering_report/report_generator.py
+```
+
+该脚本根据 `PROJECT_CONTEXT_SOURCES.json`、`chapter_gates.json` 和章节模板生成 `temp_report.json`。除非用户明确要求人工改写，否则不得绕过该生成器手写整份 `temp_report.json`。
 
 资料不足时必须使用以下提示格式：
 

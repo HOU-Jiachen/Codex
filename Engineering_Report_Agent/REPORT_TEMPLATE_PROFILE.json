@@ -1,0 +1,473 @@
+{
+  "template_sources": [
+    {
+      "path": "standards_templates\\work\\template_ocr",
+      "source": "ocr_markdown",
+      "chars": 13906,
+      "headings": [
+        {
+          "number": "1",
+          "title": "综合说明",
+          "style": "标题一"
+        },
+        {
+          "number": "1.1",
+          "title": "项目简况",
+          "style": "标题二"
+        },
+        {
+          "number": "1.1.1",
+          "title": "项目基本情况",
+          "style": "标题三"
+        },
+        {
+          "number": "1.1.2",
+          "title": "自然简况",
+          "style": "标题三"
+        },
+        {
+          "number": "1.2",
+          "title": "项目水土保持评价结论",
+          "style": "标题二"
+        },
+        {
+          "number": "1.3",
+          "title": "表土资源保护与利用",
+          "style": "标题二"
+        },
+        {
+          "number": "1.4",
+          "title": "弃渣场选址与堆置",
+          "style": "标题二"
+        },
+        {
+          "number": "1.5",
+          "title": "水土流失预测结果",
+          "style": "标题二"
+        },
+        {
+          "number": "1.6",
+          "title": "水土流失防治",
+          "style": "标题二"
+        },
+        {
+          "number": "1.6.1",
+          "title": "水土流失防治责任范围及目标",
+          "style": "标题三"
+        },
+        {
+          "number": "1.6.2",
+          "title": "水土流失防治分区及措施",
+          "style": "标题三"
+        },
+        {
+          "number": "1.7",
+          "title": "水土保持监测方案",
+          "style": "标题二"
+        },
+        {
+          "number": "1.8",
+          "title": "水土保持投资及效益分析成果",
+          "style": "标题二"
+        },
+        {
+          "number": "1.9",
+          "title": "结论",
+          "style": "标题二"
+        },
+        {
+          "number": "2",
+          "title": "项目概况",
+          "style": "标题一"
+        },
+        {
+          "number": "2.1",
+          "title": "项目组成及工程布置",
+          "style": "标题二"
+        },
+        {
+          "number": "2.2",
+          "title": "施工组织",
+          "style": "标题二"
+        },
+        {
+          "number": "2.2.1",
+          "title": "施工生产生活区",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.2",
+          "title": "施工道路",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.3",
+          "title": "施工用水、用电",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.4",
+          "title": "施工导流(不涉及的不列）",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.5",
+          "title": "取土场(不涉及的不列）",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.6",
+          "title": "弃渣场(不涉及的不列)",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.7",
+          "title": "临时堆土场(不涉及的不列)",
+          "style": "标题三"
+        },
+        {
+          "number": "2.2.8",
+          "title": "施工工艺与方法",
+          "style": "标题三"
+        },
+        {
+          "number": "2.3",
+          "title": "工程占地",
+          "style": "标题二"
+        },
+        {
+          "number": "2.4",
+          "title": "土石方平衡",
+          "style": "标题二"
+        },
+        {
+          "number": "2.5",
+          "title": "拆迁(移民)安置与专项设施改(迁)建(不涉及的不列）",
+          "style": "标题二"
+        },
+        {
+          "number": "2.6",
+          "title": "工程进度",
+          "style": "标题二"
+        },
+        {
+          "number": "2.7",
+          "title": "自然概况",
+          "style": "标题二"
+        },
+        {
+          "number": "2.7.1",
+          "title": "地质",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.2",
+          "title": "地貌",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.3",
+          "title": "气候气象",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.4",
+          "title": "水文",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.5",
+          "title": "土壤",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.6",
+          "title": "植被",
+          "style": "标题三"
+        },
+        {
+          "number": "2.7.7",
+          "title": "水土保持敏感区及其他敏感区",
+          "style": "标题三"
+        },
+        {
+          "number": "3",
+          "title": "项目水土保持评价",
+          "style": "标题一"
+        },
+        {
+          "number": "3.1",
+          "title": "主体工程选址（线）水土保持评价",
+          "style": "标题二"
+        },
+        {
+          "number": "3.2",
+          "title": "建设方案与布局水土保持评价",
+          "style": "标题二"
+        },
+        {
+          "number": "3.3",
+          "title": "工程占地评价",
+          "style": "标题二"
+        },
+        {
+          "number": "3.4",
+          "title": "土石方平衡评价",
+          "style": "标题二"
+        },
+        {
+          "number": "3.5",
+          "title": "取土场设置评价（不设取土场的不列）",
+          "style": "标题二"
+        },
+        {
+          "number": "3.6",
+          "title": "施工方法与工艺评价",
+          "style": "标题二"
+        },
+        {
+          "number": "3.7",
+          "title": "主体工程设计中具有水土保持功能工程的分析评价",
+          "style": "标题二"
+        },
+        {
+          "number": "4",
+          "title": "表土资源保护与利用",
+          "style": "标题一"
+        },
+        {
+          "number": "4.1",
+          "title": "表土资源调查与评价",
+          "style": "标题二"
+        },
+        {
+          "number": "4.1.1",
+          "title": "表土资源调查",
+          "style": "标题三"
+        },
+        {
+          "number": "4.1.2",
+          "title": "表土资源评价",
+          "style": "标题三"
+        },
+        {
+          "number": "4.2",
+          "title": "表土保护方案",
+          "style": "标题二"
+        },
+        {
+          "number": "4.2.1",
+          "title": "表土剥离保护",
+          "style": "标题三"
+        },
+        {
+          "number": "4.2.2",
+          "title": "表土就地保护",
+          "style": "标题三"
+        },
+        {
+          "number": "4.3",
+          "title": "表土堆存与养护",
+          "style": "标题二"
+        },
+        {
+          "number": "4.3.1",
+          "title": "表土堆存",
+          "style": "标题三"
+        },
+        {
+          "number": "4.3.2",
+          "title": "表土养护",
+          "style": "标题三"
+        },
+        {
+          "number": "4.4",
+          "title": "表土利用",
+          "style": "标题二"
+        },
+        {
+          "number": "4.4.1",
+          "title": "表土需求分析",
+          "style": "标题三"
+        },
+        {
+          "number": "4.4.2",
+          "title": "表土回覆",
+          "style": "标题三"
+        },
+        {
+          "number": "4.4.3",
+          "title": "表土再利用",
+          "style": "标题三"
+        },
+        {
+          "number": "5",
+          "title": "弃渣场选址与堆置（不设弃渣场、临时堆土场的不列）",
+          "style": "标题一"
+        },
+        {
+          "number": "5.1",
+          "title": "渣土来源及流向",
+          "style": "标题二"
+        },
+        {
+          "number": "5.2",
+          "title": "弃渣场选址、堆置方案与级别",
+          "style": "标题二"
+        },
+        {
+          "number": "6",
+          "title": "水土流失分析与预测",
+          "style": "标题一"
+        },
+        {
+          "number": "6.1",
+          "title": "水土流失现状",
+          "style": "标题二"
+        },
+        {
+          "number": "6.2",
+          "title": "水土流失影响因素分析",
+          "style": "标题二"
+        },
+        {
+          "number": "6.3",
+          "title": "土壤流失量预测",
+          "style": "标题二"
+        },
+        {
+          "number": "6.4",
+          "title": "水土流失危害分析",
+          "style": "标题二"
+        },
+        {
+          "number": "7",
+          "title": "水土流失防治",
+          "style": "标题一"
+        },
+        {
+          "number": "7.1",
+          "title": "水土流失防治责任范围",
+          "style": "标题二"
+        },
+        {
+          "number": "7.2",
+          "title": "设计水平年",
+          "style": "标题二"
+        },
+        {
+          "number": "7.3",
+          "title": "水土流失防治目标",
+          "style": "标题二"
+        },
+        {
+          "number": "7.3.1",
+          "title": "执行标准等级",
+          "style": "标题三"
+        },
+        {
+          "number": "7.3.2",
+          "title": "防治目标",
+          "style": "标题三"
+        },
+        {
+          "number": "7.4",
+          "title": "防治区划分",
+          "style": "标题二"
+        },
+        {
+          "number": "7.5",
+          "title": "措施总体布局",
+          "style": "标题二"
+        },
+        {
+          "number": "7.6",
+          "title": "工程级别与设计标准",
+          "style": "标题二"
+        },
+        {
+          "number": "7.7",
+          "title": "分区措施布设",
+          "style": "标题二"
+        },
+        {
+          "number": "7.8",
+          "title": "施工组织",
+          "style": "标题二"
+        },
+        {
+          "number": "8",
+          "title": "水土保持监测",
+          "style": "标题一"
+        },
+        {
+          "number": "8.1",
+          "title": "范围和时段",
+          "style": "标题二"
+        },
+        {
+          "number": "8.2",
+          "title": "内容、方法与频次",
+          "style": "标题二"
+        },
+        {
+          "number": "8.2.1",
+          "title": "监测内容",
+          "style": "标题三"
+        },
+        {
+          "number": "8.2.2",
+          "title": "监测方法与频次",
+          "style": "标题三"
+        },
+        {
+          "number": "8.3",
+          "title": "点位布设与监测设施",
+          "style": "标题二"
+        },
+        {
+          "number": "8.4",
+          "title": "实施条件和成果",
+          "style": "标题二"
+        },
+        {
+          "number": "9",
+          "title": "水土保持投资及效益分析",
+          "style": "标题一"
+        },
+        {
+          "number": "9.1",
+          "title": "投资估算",
+          "style": "标题二"
+        },
+        {
+          "number": "9.1.1",
+          "title": "编制原则及依据",
+          "style": "标题三"
+        },
+        {
+          "number": "9.1.2",
+          "title": "编制说明与估算成果",
+          "style": "标题三"
+        },
+        {
+          "number": "9.2",
+          "title": "效益分析",
+          "style": "标题二"
+        },
+        {
+          "number": "10",
+          "title": "水土保持管理",
+          "style": "标题一"
+        }
+      ]
+    }
+  ],
+  "ocr_required_templates": [
+    {
+      "path": "standards_templates\\水土保持方案编制模板.pdf",
+      "reason": "模板 PDF 可抽取文字过少，可能为扫描件，需要先 OCR 后才能提取章节结构。",
+      "chars": 436
+    }
+  ]
+}
