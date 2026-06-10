@@ -1,7 +1,7 @@
 **使用codex写水土保持方案**
 本项目使用python写入word，需要有python环境并下载相关包：pip install pypdf python-docx；
 json、re、datetime、pathlib、os 都是 Python 标准库，不需要下载。
-**前期准备：**
+**前期准备**
 *1. AGENTS.md：控制语气、禁忌词（如拒绝AI套话）、专有名词标准（如必须用“植物措施”），可根据项目规范进行调整。*
 *2. templates / report_template.docx：word模板，可根据现有样式进行修改，注意：不要修改名称或新建样式。*
 *3. knowledge文件夹：存放长期使用的相关文件，可支持word、PDF等文件，注意：最好不要单独放图件。*
@@ -13,8 +13,9 @@ json、re、datetime、pathlib、os 都是 Python 标准库，不需要下载。
 9. projects文件夹：存放每个项目的相关资料，用于提升复用性，并避免不同项目之间资料数据互相污染。
 10. pdf-converter skill：外部下载的PDF读取skill，下载命令为：npx skills add tanis90/pdf-converter-mineru。
 11. PROJECT_CONTEXT_OVERRIDE.md：人工补充项目上下文，最优先读取的资料。
+12. ACTIVE_PROJECT.txt: 存放本项目名称, 需与projects/"项目名称"对应。
 
-**开始运行：**
+**开始运行**
 第一步：在 Codex 中打开您的项目工作区
 请确保您的 Codex 当前已经加载或打开了 X:\XXX\Engineering_Report_Agent 这个文件夹。如果还没有，请在 Codex 的菜单栏选择 File -> Open Folder（打开文件夹），然后选中该路径。
 第二步：在 Codex 聊天框中发送启动指令
@@ -31,3 +32,7 @@ json、re、datetime、pathlib、os 都是 Python 标准库，不需要下载。
 📁 Agent提示：中间数据 temp_report.json 已写入完毕并关闭。
 🚀 请您确认该文件未被占用或已保存，并在此回复 "Y" 允许我开始调用 Word 样式排版引擎。
 此时您只需要在聊天框再次回复一个 Y 并回车。
+
+**运行结束**
+1. 查看report_template.docx末尾的补充资料清单，将能补充的资料补充至projects文件夹。
+2. 和agent讲"已补充资料更新最终报告"即可，无需重新运行一遍。
